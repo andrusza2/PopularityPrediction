@@ -3,28 +3,33 @@ import numpy as np
 import pickle
 from faster_rcnn_feature_extractor import Predictor
 
-predictor = None
+predictorPref = None
+predictorFirst = None
 
 
 def getPredictor():
-    global predictor
+    global predictorPref
 
-    if predictor is None:
-        predictor = Predictor()
+    if predictorPref is None:
+        predictorPref = Predictor()
 
-    return predictor
-
-
-clf = pickle.load(open("app/svr/svr_test_pref_26.10.sk", 'rb'))
+    return predictorPref
 
 
-def predict(imgpath, task=None):
+clf_pref = pickle.load(open("app/svr/svr_test_pref_26.10.sk", 'rb'))
+clf_first = pickle.load(open("app/svr/svr_test_first_after_gs_28.08.sk", 'rb'))
+
+
+def predict(imgpath, task=None, svr_type="pref"):
     if (task):
         task.update_state(state='PROGRESS',meta={'current': 10 , 'total': 100, 'status': "Getting neural network feature extractor"})
     feature_vector = getPredictor().extract_features(imgpath).reshape(1, -1)
     if (task):
         task.update_state(state='PROGRESS',meta={'current': 60, 'total': 100, 'status': "Predicting using SVR predictor"})
-    predicted = clf.predict(feature_vector)
+    if (svr_type == "pref"):
+        predicted = clf_pref.predict(feature_vector)
+    elif (svr_type == "first"):
+        predicted = clf_first.predict(feature_vector)
     return predicted
 
 

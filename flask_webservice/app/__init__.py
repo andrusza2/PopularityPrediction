@@ -80,6 +80,7 @@ def create_app(config_name):
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
                 task = long_task.apply_async(args=[os.path.join(app.config['UPLOAD_FOLDER'], filename)])
+                # result = task.get()
                 return jsonify({}), 202, {'Location': url_for('taskstatus',
                                                               task_id=task.id),
                                           'Thumbnail': url_for('uploaded_file',
