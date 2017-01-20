@@ -16,7 +16,7 @@ import caffe
 import os
 
 
-class Predictor:
+class FeatureExtractor:
 
     net = None
     transformer = None
@@ -55,7 +55,7 @@ class Predictor:
 
         caffe.set_device(0)  # if we have multiple GPUs, pick the first one
         caffe.set_mode_gpu()
-
+        # caffe.set_mode_cpu()
 
     def extract_features(self, img_path):
         image = caffe.io.load_image(img_path)
