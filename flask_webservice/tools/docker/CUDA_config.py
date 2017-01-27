@@ -11,16 +11,14 @@ class Config:
     """
     Application configuration.
     """
-    SECRET_KEY = 'top-secret!'
-    UPLOAD_FOLDER = '/var/tmp'
-    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4'}
-    MAX_CONTENT_LENGTH = 100 * 1024 * 1024
+    UPLOAD_FOLDER = '/tmp'
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-    CELERY_BROKER_URL = 'amqp://localhost'
-    CELERY_RESULT_BACKEND = 'amqp://localhost'
+    # CELERY_BROKER_URL = 'amqp://localhost'
+    # CELERY_RESULT_BACKEND = 'amqp://localhost'
 
-    # CELERY_BROKER_URL = 'redis://localhost:6379/0'
-    # CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+    CELERY_BROKER_URL = 'redis://localhost:6379/0'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
     CAFFE_MODE = "gpu"
 

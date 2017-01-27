@@ -1,9 +1,6 @@
 // Load the Visualization API and the corechart package.
 google.charts.load('current', {'packages': ['corechart']});
 
-// // Set a callback to run when the Google Visualization API is loaded.
-// google.charts.setOnLoadCallback(drawChart);
-
 // Callback that creates and populates a data table,
 // instantiates the column chart, passes in the data and
 // draws it.
@@ -13,7 +10,7 @@ function drawPredictionChart(first_thumbnail_result, pref_thumbnail_result) {
     var data = google.visualization.arrayToDataTable([
         ['Result', 'Popularity Score'],
         ['First Thumbnail', first_thumbnail_result],
-        ['Preferred Thumbnail', pref_thumbnail_result],
+        ['Preferred Thumbnail', pref_thumbnail_result]
     ]);
 
     // Set chart options
@@ -23,11 +20,11 @@ function drawPredictionChart(first_thumbnail_result, pref_thumbnail_result) {
         'height': 350,
         'animation': {
             'startup': true,
-            'duration': 1500,
+            'duration': 1500
         },
         'legend': { position: 'none' },
         'vAxis': {
-            minValu: 0,
+            minValue: 0,
             maxValue: 10,
             ticks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
           }

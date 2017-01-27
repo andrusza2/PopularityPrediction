@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+"""
+Module used for starting celery-worker.
+"""
+
 import os
 from app import celery, create_app
 

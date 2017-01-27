@@ -1,0 +1,92 @@
+FROM ubuntu:14.04
+
+LABEL maintainer Pawel Andruszkiewicz <Pawel.Andruszkiewicz.1@stud.elka.pw.edu.pl>
+
+# Pick up dependencies
+
+RUN apt-get update && apt-get install -y \
+        libprotobuf-dev \
+        libleveldb-dev \
+        libsnappy-dev \
+        libopencv-dev \
+        libhdf5-serial-dev \
+        protobuf-compiler \
+        libatlas-base-dev 
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libboost-all-dev 
+
+RUN apt-get update && apt-get install -y \
+        libgflags-dev \
+        libgoogle-glog-dev \
+        liblmdb-dev \
+        build-essential \
+        cmake \
+        git \
+        python-pip \
+        python-dev \
+        python-numpy \
+        python-scipy \
+        libopencv-dev \
+        wget \
+        && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install caffe
+
+WORKDIR /opt
+
+RUN git clone https://github.com/BVLC/caffe.git
+
+COPY tools/docker/CPU_Makefile.config caffe/Makefile.config
+
+WORKDIR /opt/caffe/python
+
+RUN for req in $(cat requirements.txt); do pip install $req; done
+
+WORKDIR /opt/caffe
+
+RUN make all -j4
+RUN make test -j4
+RUN make runtest
+RUN make pycaffe
+
+# Install Redis
+
+WORKDIR /opt
+
+RUN wget http://download.redis.io/redis-stable.tar.gz
+RUN tar xvzf redis-stable.tar.gz
+WORKDIR redis-stable
+RUN make
+RUN make install
+RUN rm -rf redis-stable
+
+# Install Celery 
+# RUN pip install Celery
+# RUN pip install redis
+
+COPY requirements.txt /PopularityPrediction/requirements.txt
+WORKDIR /PopularityPrediction
+RUN for req in $(cat requirements.txt); do pip install $req; done
+
+COPY app /PopularityPrediction/app/
+COPY tests /PopularityPrediction/tests/
+COPY tools /PopularityPrediction/tools/
+COPY celery_worker.py /PopularityPrediction/celery_worker.py
+COPY tools/docker/CPU_config.py /PopularityPrediction/config.py
+COPY manage.py /PopularityPrediction/manage.py
+COPY start_webservice.sh /PopularityPrediction/start_webservice.sh
+
+RUN adduser --disabled-password --gecos '' myuser
+
+RUN chown myuser:myuser .  
+
+ENV PYTHONPATH=/opt/caffe/python
+
+EXPOSE 5000
+
+ENTRYPOINT ["/bin/bash"]
+
+

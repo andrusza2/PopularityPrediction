@@ -108,7 +108,7 @@ h3 {
     font-size: 2.75em;
     height: 40px;
     line-height: 40px;
-    padding-left: 18px;
+    /*padding-left: 18px;*/
     color: black;
     /*color: #997a4a;*/
     font-weight: bold;
@@ -289,7 +289,9 @@ form#login, form#register {
   width: 100%;
   height: 25px;
   z-index: 9999;
-  top:0
+  top:0;
+  margin-top: 18px;
+  margin-bottom: 15px;
 }
 .bar {
   width: 0;
@@ -325,6 +327,7 @@ form#login, form#register {
     max-height: 330px;
 }
 
-.footer {
-    text-align: left;
+footer {
+    text-align: right;
+    padding-right: 15px;
 }
